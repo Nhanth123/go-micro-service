@@ -1,4 +1,4 @@
-package main
+﻿package main
 
 import (
 	"encoding/json"
@@ -13,18 +13,12 @@ type jsonResponse struct {
 	Data    any    `json:"data,omitempty"`
 }
 
-<<<<<<< HEAD
-func (app *Config) readJson(w http.ResponseWriter, r *http.Request, data any) error {
-	maxBytes := 1048576
-	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
-=======
 // readJSON tries to read the body of a request and converts it into JSON
 func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) error {
 	maxBytes := 1048576 // one megabyte
 
 	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
 
->>>>>>> 3554a1a81cdaf14d021ad355dc82054a4a0b0e56
 	dec := json.NewDecoder(r.Body)
 	err := dec.Decode(data)
 	if err != nil {
@@ -33,12 +27,6 @@ func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) er
 
 	err = dec.Decode(&struct{}{})
 	if err != io.EOF {
-<<<<<<< HEAD
-		return errors.New("body must have a single JSON value")
-	}
-	return nil
-}
-=======
 		return errors.New("body must have only a single JSON value")
 	}
 
@@ -68,6 +56,8 @@ func (app *Config) writeJSON(w http.ResponseWriter, status int, data any, header
 	return nil
 }
 
+// errorJSON takes an error, and optionally a response status code, and generates and sends
+// a json error response
 func (app *Config) errorJSON(w http.ResponseWriter, err error, status ...int) error {
 	statusCode := http.StatusBadRequest
 
@@ -81,4 +71,3 @@ func (app *Config) errorJSON(w http.ResponseWriter, err error, status ...int) er
 
 	return app.writeJSON(w, statusCode, payload)
 }
->>>>>>> 3554a1a81cdaf14d021ad355dc82054a4a0b0e56
